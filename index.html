@@ -180,7 +180,20 @@ La raison pour laquelle les méthodes retournent le receiver est que le type imp
 <!-- On utilise aussi beaucoup plus id qu'aujourd'hui : maintenant, on préfère déclarer un spécifier la classe du pointeur. -->
 
 ---
-#### NeXT OS 4.0, 1994
+#### “Cocoa”
+
+<!--
+Les concepts fondamentaux de Cocoa existent déjà. On retrouve ces concepts aujourd'hui encore dans le design de UIKit.
+-->
+
+* Interface Builder et AppKit
+	* (Xcode s’appelle Project Builder)
+* IBOutlets and IBActions
+* Target-Action
+* Responder Chain
+
+---
+#### NeXTSTEP 4.0, 1994
 
 * Préfixe `NS`
 
@@ -206,19 +219,17 @@ Surtout, `NSObject` remplace `Object`
 	
 * Sur GnuStep, les `Object`s ont une méthode `free`, comme en c++.
 
-
 ---
-#### “Cocoa”
+#### Foundation
 
-<!--
-Les concepts fondamentaux de Cocoa existent déjà. On retrouve ces concepts aujourd'hui encore dans le design de UIKit.
+<!-- Foundation apporte aussi un lot de méthodes pour faciliter la manipulation bas niveau, et le forward d'invocation -->
+
+* NSSelectorFromString, NSClassFromString, etc.
+* NSInvocation
+* NSProxy 
+
+<!-- le forward est plus ou moins vu comme un palliatif à l'absence d'héritage multiple. En tout les cas, c'est un mécanisme de POO qui est permit par des objets NS.
 -->
-
-* Interface Builder et AppKit
-	* (Xcode s’appelle Project Builder)
-* IBOutlets and IBActions
-* Target-Action
-* Responder Chain
 
 ---
 #### Enterprise Objects Framework
@@ -250,20 +261,7 @@ Le serveur d'entreprise d’Apple, et surtout
 
 <!--
 qui apparaitra plus tard, mais qui reprend exactement la même idée.
--->
-
----
-#### Foundation
-
-<!-- Foundation apporte aussi un lot de méthodes pour faciliter la manipulation bas niveau, et le forward d'invocation -->
-
-* NSSelectorFromString, NSClassFromString, etc.
-* NSInvocation
-* NSProxy 
-
-<!-- le forward est plus ou moins vu comme un palliatif à l'absence d'héritage multiple. En tout les cas, c'est un mécanisme de POO qui est permit par des objets NS.
--->
-	
+-->	
 
 ---
 layout:false
