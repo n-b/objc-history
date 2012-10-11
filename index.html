@@ -14,7 +14,7 @@
 	@import url(http://fonts.googleapis.com/css?family=Quattrocento+Sans:400,700);
 	@import url(http://fonts.googleapis.com/css?family=Amaranth:700italic);
 
-	h1, h2 {
+	h1 {
 		font-family: 'Amaranth', sans-serif;
 		font-weight: bold;
 		font-style: italic;
@@ -51,34 +51,67 @@ class: center, middle
 
 *(Partiel et subjectif)*
 
+
+---
+
+class: center
+
+## C & SmallTalk
+
+--
+
+## Brad Cox & Tom Love
+<!--
+
+1980 
+
+Fin 70, début 80, mode de la POO.
+
+* C++ date de 1983
+ 
+-->
+
+--
+
+## Stepwise
+
+--
+
+## gcc
+
+--
+
+## NeXT
+
+--
+
+##### NeXTSTEP, OPENSTEP, GnuStep
+
+--
+
+## poc
+
+--
+
+## Apple
+
+--
+
+## clang
+
+
 <!--
 La responsabilité du langage à évolué.
 
 Pas de standard ISO ou normé, contrairement à C ou C++; pas non plus d'organisme dédié à la normalisation, contrairement à tous les languages. Java avait Sun Perl, ruby a une souce officielle sur ruby-lang, python.org, etc. Objective-C est un des seuls languages a ne pas avoir sa propre homepage.
 -->
 
----
-
-# Création du language
-
 <!--
-* C (Dennis Ritchie)
-* Smalltalk (Alan Kay & Dan Ingalls)
-
- : à la base un travail universitaire.
- -->
-
-* 1980, Brad cox & Tom Love
-
---
-* C++ date de 1983
-
-
-<!--
-L'implémentation originale de Brad Cox était un preprocessor, qui générait du C. (il n'y avait pas de runtime)
+L'implémentation originale de Brad Cox était un preprocessor, qui générait du C.
 -->
 
-* C structs
+<!--
+* Les objets sont compilés C structs
 * access ivars with ->
 * .h et .m
 
@@ -88,37 +121,51 @@ L'implémentation originale de Brad Cox était un preprocessor, qui générait d
 @defs
 ```
 
+Je me concentre sur la branche principale, de Next à Apple.
+-->
+
 
 ---
 
-# Next
+class: center, middle
 
+# NeXT
+
+<!--
 * Next licences objc from stepwise
 
-1992 :
+Début des années 90, le paysage ObjC est très différent de 2012.
+-->
 
->how much does Stepstone charge for the PC version of Obj-C ? And, does it run on a 286 ?
+--
 
-* NextStep, OPENSTEP, GNUSTEP,
-* Next, Sun, FSF
-* Forks du langage pour blocks (POC)
-(HOM)
+“How much does Stepstone charge for the PC version of Obj-C&nbsp;?<br>And, does it run on a 286&nbsp;?”
 
-Next OS 4.0,  1994
->  The Foundation kit release notes describes the new autorelease, retain, release paradigm.
->  NeXT dropped the ball by electing to add features to their languages through convention, rather than syntax.
+<!--
+* NeXTStep n'est pas la seule implémentation ObjC à l'époque, il y a aussi GnuStep, et POC.
+* NExtStep Enterprise tourne sur d'autres archis, y compris sur NT.
+-->
 
-Le préfixe est "NX"
+---
+
+class: center, middle
+
+# Next OS 4.0,  1994
+	
+“The Foundation kit release notes describes the new<br>
+ **autorelease, retain, release**<br>
+  paradigm.”
+
+<!--
+Le préfixe est "NX", devient NS à la création de Foundation
 
 -> Split Object(GnuStep) / NSObject(OpenStep/Cocoa)
 2000 : "GNUstep Foundation is not finished and not usable"
-
-NExtStep Enterprise tourne sur d'autres archis, y compris sur NT
-
-* WebObjects
+-->
 
 ---
 layout:true
+class: center
 # Next 
 
 ---
@@ -127,38 +174,68 @@ layout:true
 	* Les Objects GnuStep ont une méthode "free", comme en c++
 	* La doc GnuStep mentionne le retain count comme méthode "semi-automatique", 
 	* Nouvelle hiérarchie NSObject vs Object
-* KVC est aussi créé chez Next (dans EOF)
-* La doc GnuStep mentionne aussi les Categories comme un ajout par Next.
+
+
+---
+
+## "Cocoa"
+
+* Interface Builder et AppKit
+* IBOutlets and IBActions
+* Target-Action,
+* Responder Chain
+
+---
+
+* Enterprise Objects Framework
+	* KVC
+	* WebObjects
+	* Coredata
+
+---
+
 * Swizzling
 * NSProxy
 * Distributed Objects
   * distributed objects and type qualifies (oneway in out inout bycopy byref)
-* Iboutlets and actions
-* "Cocoa" et "Foundation"
-* target-action paradigm, responder chain
 * nsbundle & dynamic loading of classes
 	* [NSBundle bundleForClass:]
 	* Objc_loadmodule
 * NSSelectorFromString, NSClassFromString, etc. sont en fait des méthodes dans Foundation !
 * NSInvocation
 * NSProxy
-
-* Enterprise Objects Framework
-	* KVC
-	* WebObjects
-	* Coredata
 	
 ---
 
-different style, most methods return self implicitely, you can write
 
-    [[obj doThis] andThenDoThat]
+<!--
+ different style, most methods return self implicitely, you can write 
+ -->
 
-(id) is still the default type for methods and args, you can write
+````
+@inteface SomeClass
+- (id) doThis;
+- (id) doThat;
+@end
 
-```
+...
+
+[[someObject doThis] doThat];
+````
+
+----
+
+<!-- 
+(id) is !still! the default type for methods and args, you can write 
+-->
+
+````
+@inteface SomeClass
+- doThisWithThat:someOtherObject;
+@end
+
 @implementation MyClass
-- method: someObject
+- doThisWithThat: someOtherObject
 {
     return someObject;
 }
@@ -166,17 +243,26 @@ different style, most methods return self implicitely, you can write
 ```
 
 
-
-
 ---
+layout:true
+class: center
 
 # Apple
 
+---
 
-* Rachat de Next en 1997
-* autres pistes : JavaCocoa, Carbon. BlueBox et YellowBox.
+Rachat de Next en 1997
 
-> Cocoa is owned by Apple, and the indications are that Apple is going to either completely drop its support for ObjC in favor of Java, or at least de-emphasize its use to the point where nobody would want to even look at it (in fact, this "death by default" has already happened).
+---
+
+Carbon
+
+JavaCocoa
+
+--
+“Cocoa is owned by Apple, and the indications are that Apple is going to either completely drop its support for ObjC in favor of Java, or at least de-emphasize its use to the point where nobody would want to even look at it (in fact, this "death by default" has already happened).”
+
+class:right
 
 comp.sys.next.programmer, Avril 2000.
 
@@ -334,6 +420,7 @@ laytout: false
 * automatic call of super (no need to specify args)
 * shorter NSString format
 * Boxing for nsvalues
+> "The default implementations of valueForKey: and setValue:forKey: provide support for automatic object wrapping of the non-object data types, both scalars and structs."
 * namespaces
 
 ## Semantics to use
@@ -362,6 +449,6 @@ http://developer.apple.com/library/ios/ipad/#documentation/Cocoa/Reference/ObjCR
 http://developer.apple.com/library/ios/#releasenotes/ObjectiveC/ObjCAvailabilityIndex/_index.html
 http://web.archive.org/web/19990219224850/http://www2.stepwise.com/Resources/Newsgroups/roadmap.html
 https://groups.google.com/forum/?fromgroups=#!topic/comp.sys.next.programmer/NUXThBOc360
-
+http://developer.apple.com/library/ios/#documentation/cocoa/conceptual/KeyValueCoding/Articles/DataTypes.html
 
 </textarea><div id="slideshow"></div></body></html>
