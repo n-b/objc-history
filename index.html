@@ -3,31 +3,365 @@
   <head>
     <title>Title</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="https://github.com/downloads/gnab/remark/remark-0.4.2.min.js" type="text/javascript"></script>
-    <style type="text/css" media="screen">
-      /* Slideshow styles */
-    </style>
+    <script src="https://github.com/downloads/gnab/remark/remark-0.4.2.min.js" type="text/javascript">
+	{ 
+		"highlightLanguage": "objectivec",
+		"highlightInline": true,
+		"highlightStyle": "solarized_light"
+	}
+	</script>
+	<style type="text/css" media="screen">
+	@import url(http://fonts.googleapis.com/css?family=Quattrocento+Sans:400,700);
+	@import url(http://fonts.googleapis.com/css?family=Amaranth:700italic);
+
+	h1, h2 {
+		font-family: 'Amaranth', sans-serif;
+		font-weight: bold;
+		font-style: italic;
+	}
+	body {
+		font-family: 'Quattrocento Sans', sans-serif;
+	}
+	a {
+		color: #a86;
+		text-decoration: none;
+	}
+	.position {
+		visibility: hidden;
+	}
+	.footnote {
+		position: absolute;
+		bottom: 1em;
+		left: 1em;
+		right: 1em;
+	}
+	</style>
   </head>
   <body>
     <textarea id="source">
 
 class: center, middle
 
-# Title
+# Objective-C Features 
+#### Un aperçu historique
+
+.footnote[[github.com/n-b/objc-features](github.com/n-b/objc-features)]
+
+--
+
+*(Partiel et subjectif)*
+
+<!--
+La responsabilité du langage à évolué.
+
+Pas de standard ISO ou normé, contrairement à C ou C++; pas non plus d'organisme dédié à la normalisation, contrairement à tous les languages. Java avait Sun Perl, ruby a une souce officielle sur ruby-lang, python.org, etc. Objective-C est un des seuls languages a ne pas avoir sa propre homepage.
+-->
 
 ---
 
-# Agenda
+# Création du language
 
-1. Introduction
-2. Deep-dive
-3. ...
+<!--
+* C (Dennis Ritchie)
+* Smalltalk (Alan Kay & Dan Ingalls)
+
+ : à la base un travail universitaire.
+ -->
+
+* 1980, Brad cox & Tom Love
+
+--
+* C++ date de 1983
+
+
+<!--
+L'implémentation originale de Brad Cox était un preprocessor, qui générait du C. (il n'y avait pas de runtime)
+-->
+
+* C structs
+* access ivars with ->
+* .h et .m
+
+```
+@class, @interface, @protocol, 
+@encode
+@defs
+```
+
 
 ---
 
-# Introduction
+# Next
 
-    </textarea>
-    <div id="slideshow"></div>
-  </body>
-</html>
+* Next licences objc from stepwise
+
+1992 :
+
+>how much does Stepstone charge for the PC version of Obj-C ? And, does it run on a 286 ?
+
+* NextStep, OPENSTEP, GNUSTEP,
+* Next, Sun, FSF
+* Forks du langage pour blocks (POC)
+(HOM)
+
+Next OS 4.0,  1994
+>  The Foundation kit release notes describes the new autorelease, retain, release paradigm.
+>  NeXT dropped the ball by electing to add features to their languages through convention, rather than syntax.
+
+Le préfixe est "NX"
+
+-> Split Object(GnuStep) / NSObject(OpenStep/Cocoa)
+2000 : "GNUstep Foundation is not finished and not usable"
+
+NExtStep Enterprise tourne sur d'autres archis, y compris sur NT
+
+* WebObjects
+
+---
+layout:true
+# Next 
+
+---
+
+* Manual Retain Count (retain release autorelease) appeared in Nextstep, not before (1994, OS 4)
+	* Les Objects GnuStep ont une méthode "free", comme en c++
+	* La doc GnuStep mentionne le retain count comme méthode "semi-automatique", 
+	* Nouvelle hiérarchie NSObject vs Object
+* KVC est aussi créé chez Next (dans EOF)
+* La doc GnuStep mentionne aussi les Categories comme un ajout par Next.
+* Swizzling
+* NSProxy
+* Distributed Objects
+  * distributed objects and type qualifies (oneway in out inout bycopy byref)
+* Iboutlets and actions
+* "Cocoa" et "Foundation"
+* target-action paradigm, responder chain
+* nsbundle & dynamic loading of classes
+	* [NSBundle bundleForClass:]
+	* Objc_loadmodule
+* NSSelectorFromString, NSClassFromString, etc. sont en fait des méthodes dans Foundation !
+* NSInvocation
+* NSProxy
+
+* Enterprise Objects Framework
+	* KVC
+	* WebObjects
+	* Coredata
+	
+---
+
+different style, most methods return self implicitely, you can write
+
+    [[obj doThis] andThenDoThat]
+
+(id) is still the default type for methods and args, you can write
+
+```
+@implementation MyClass
+- method: someObject
+{
+    return someObject;
+}
+@end
+```
+
+
+
+
+---
+
+# Apple
+
+
+* Rachat de Next en 1997
+* autres pistes : JavaCocoa, Carbon. BlueBox et YellowBox.
+
+> Cocoa is owned by Apple, and the indications are that Apple is going to either completely drop its support for ObjC in favor of Java, or at least de-emphasize its use to the point where nobody would want to even look at it (in fact, this "death by default" has already happened).
+
+comp.sys.next.programmer, Avril 2000.
+
+---
+
+layout: true
+
+# Apple
+
+---
+
+## 10.0 (2001)
+
+* toll-free-bridging
+ * Objc_get_future_class 
+
+---
+
+## 10.3
+
+* KVO & Bindings
+	* objc_duplicate_class
+* @throw exception instead of old setjmp/longjmp-based NS_DURING/NS_HANDLER.
+
+---
+
+## 10.4
+
+* switch (back) to Intel
+* CoreData,
+* KVC sur les collections
+* ajouts au KVC des opérateurs de collection.
+
+
+---
+
+# Leopard : Objective-C 2.0
+
+---
+
+layout:true
+# Leopard : Objective-C 2.0
+
+* @package
+* garbage collector
+* gcc attributes `__attribute__((deprecated))`, `NS_REQUIRES_NIL_TERMINATION`
+* dot notation
+* @properties
+* C++ compatible exceptions "zero-cost"
+* fastenums
+* `@optional` methods in Protocols.
+* we start talking about weak and strong pointers
+* Class Extentions ("catégorie anonyme")
+
+---
+### "Modern runtime"
+
+(64-bit et ARM)
+
+* Non-fragile ABI
+	* ajour d'ivar au runtime
+	* Object != struct
+* @defs et sizeof(class) ne fonctionnent plus
+* class_poseAs deprecated
+* zones (allocWithZone) are deprecated
+
+* Bridges Cocoa ruby, python, AppleScript.
+* JavaCocoa deprecated
+
+---
+
+## CoreAnimation
+
+* Core Animation Extensions To Key-Value Coding
+
+
+--- 
+# clang
+
+--- 
+layout:true
+# clang
+
+--- 
+
+## Xcode 3
+
+* clang static analyzer
+	* leverages language conventions for semantics. Convention becomes part of the language.
+
+---
+
+## iOS 4.0 / Mac OS X (10.6 ?) / "Objective-C 2.1"
+
+* blocks (?)
+* @autoreleasepool
+
+---
+
+## iOS 4.2
+
+* Macros de weak linking (NS_CLASS_AVAILABLE)
+
+## iOS 5
+* `UIAPPEARANCE_SELECTOR`
+
+---
+
+## clang 2.0? (Apple LLVM Compiler 3.0)
+
+* ivars in @implementation and in class extension
+
+* glissement sémantique : assign/retain deviennent weak/strong
+
+## Xcode 4.2
+* ARC 
+	* (deprecates garbage collector)
+	* deprecates retain and release
+	* weak (nilified) pointers
+* @autorelease
+* precise method semantics (objc_method_family, behavior attrs)
+* automatic call of [super dealloc]
+
+## Xcode 4.3 / 4.4
+* no forward declaration of methods needed anymore (clang x.x)
+
+---
+
+## Xcode 4.4 / 4.5 / Apple LLVM Compiler 4.0, clang v3.1
+
+* Autosynthesized properties
+* Boxing
+* Container Literals
+* Subscripting
+* `instancetype` keyword
+* typed enums
+
+byproducts :
+* overloaded functions in C
+* objc++11 (auto, lambdas, etc)
+* libc++
+* clang::fallthrough
+* calling a variable "id" now works with clang (didn't work in gcc)
+
+## 10.8 / iOS 5
+
+* automatic bridging with CoreFoundation with ARC, using arc_cf_code_audited
+
+---
+laytout: false
+
+# Future features ?
+
+## Syntaxic sugar
+* automatic call of super (no need to specify args)
+* shorter NSString format
+* Boxing for nsvalues
+* namespaces
+
+## Semantics to use
+* method attribute for designated initializers
+* protected methods 
+* mark methods explicitely for reimplementation, but prevent them from being called by outside code.
+* default values for parameters
+	* doSomething
+	* doSomethingWithStuff:(Stuff*)s
+
+
+---
+
+# Links
+
+---
+
+http://www.cocoacast.com/cocoacast/?q=node/14
+http://objc.toodarkpark.net/introobj.html#712
+http://cocoadev.com/wiki/ObjC
+http://www.mactech.com/articles/mactech/Vol.13/13.03/CandObjectiveCCompared/index.html
+http://blog.securemacprogramming.com/2012/04/comparing-objective-c-and-objective-c-with-objective-c/
+http://www.gnustep.org/resources/documentation/ObjectivCBook.pdf
+http://www.gnustep.org/developers/documentation.html
+http://developer.apple.com/library/ios/ipad/#documentation/Cocoa/Reference/ObjCRuntimeRef/Reference/reference.html
+http://developer.apple.com/library/ios/#releasenotes/ObjectiveC/ObjCAvailabilityIndex/_index.html
+http://web.archive.org/web/19990219224850/http://www2.stepwise.com/Resources/Newsgroups/roadmap.html
+https://groups.google.com/forum/?fromgroups=#!topic/comp.sys.next.programmer/NUXThBOc360
+
+
+</textarea><div id="slideshow"></div></body></html>
