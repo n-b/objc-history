@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Title</title>
+    <title>Objective-C</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="https://github.com/downloads/gnab/remark/remark-0.4.2.min.js" type="text/javascript">
 	{ 
@@ -89,10 +89,6 @@ Fin 70, début 80, mode de la POO.
 
 --
 
-## poc
-
---
-
 ## Apple
 
 --
@@ -132,17 +128,18 @@ class: center, middle
 # NeXT
 
 <!--
-* Next licences objc from stepwise
+* Next licences objc from Stepstone,
+* Buys Objective-C rights in 1995
 
 Début des années 90, le paysage ObjC est très différent de 2012.
 -->
 
---
+*“How much does Stepstone charge for the PC version of Obj-C&nbsp;?<br>And, does it run on a 286&nbsp;?”*
 
-“How much does Stepstone charge for the PC version of Obj-C&nbsp;?<br>And, does it run on a 286&nbsp;?”
+*comp.sys.next.programmer, 1992*
 
 <!--
-* NeXTStep n'est pas la seule implémentation ObjC à l'époque, il y a aussi GnuStep, et POC.
+* NeXTStep n'est pas la seule implémentation ObjC à l'époque, il y a aussi GnuStep.
 * NExtStep Enterprise tourne sur d'autres archis, y compris sur NT.
 -->
 
@@ -150,102 +147,199 @@ Début des années 90, le paysage ObjC est très différent de 2012.
 
 class: center, middle
 
-# Next OS 4.0,  1994
-	
-“The Foundation kit release notes describes the new<br>
- **autorelease, retain, release**<br>
-  paradigm.”
+## NeXT OS 4.0, 1994
+
+#### Préfixe `NS`
 
 <!--
-Le préfixe est "NX", devient NS à la création de Foundation
+Le préfixe des classes Next, "NX", devient NS à la création de Foundation. 
 
--> Split Object(GnuStep) / NSObject(OpenStep/Cocoa)
-2000 : "GNUstep Foundation is not finished and not usable"
+NXApp est renommé NSApp, par exemple.
+Surtout, `NSObject` remplace `Object`
+
+-> C'est le split principal entre avec GnuStep, qui continue d'utiliser Object et implémentera petit à petit les méthodes de Foundation.
+
 -->
 
----
-layout:true
-class: center
-# Next 
-
----
-
-* Manual Retain Count (retain release autorelease) appeared in Nextstep, not before (1994, OS 4)
-	* Les Objects GnuStep ont une méthode "free", comme en c++
-	* La doc GnuStep mentionne le retain count comme méthode "semi-automatique", 
-	* Nouvelle hiérarchie NSObject vs Object
+--
+	
+*“The Foundation kit release notes describes the new<br>
+ **autorelease, retain, release**<br>
+  paradigm.”*
 
 
 ---
+layout: true
 
-## "Cocoa"
+## Next 
+
+---
+
+<!-- la gestion semi-automatique de la mémoire apparait en 1994 -->
+
+### Gestion “Semi-Automatique” de la mémoire
+
+    - (id) retain;
+    - (void) release;
+    - (id) autorelease;
+
+--
+	
+Sur GnuStep, les `Object`s ont une méthode `free`, comme en c++.
+
+
+---
+
+### “Cocoa”
+
+<!--
+Les concepts fondamentaux de Cocoa existent déjà. On retrouve ces concepts aujourd'hui encore dans le design de UIKit.
+-->
 
 * Interface Builder et AppKit
+	* (Xcode s’appelle Project Builder)
 * IBOutlets and IBActions
-* Target-Action,
+* Target-Action
 * Responder Chain
 
 ---
 
-* Enterprise Objects Framework
-	* KVC
-	* WebObjects
-	* Coredata
+## “Enterprise Objects Framework”
+
+<!-- 
+Le principal produit de NeXT après l’échec des machines comme le cube, un framework objet orienté Entreprises.
+
+Il va introduire des concepts très importants pour la suite
+-->
+
+--
+
+* Key-Value Coding via le protocole `EOFKeyValueCoding`
+
+	- (void) valueForKey:(NSString*)key;
+	- (void) setValue:(id)value forKey:(NSString*)key;
+	
+<!-- 
+Strictement, ce n'est pas une partie du langage, même s'il utilise les accès bas-niveau du Runtime.
+A l’époque, la question ne se pose d’ailleurs pas, ce sont des méthodes de EOF, pas du langage.
+-->
+
+--
+
+* WebObjects
+
+<!--
+Le serveur d'entreprise d’Apple, et surtout
+-->
+--
+
+* Coredata
+
+<!--
+qui apparaitra plus tard, mais qui reprend exactement la même idée.
+-->
 
 ---
 
-* Swizzling
-* NSProxy
-* Distributed Objects
-  * distributed objects and type qualifies (oneway in out inout bycopy byref)
-* nsbundle & dynamic loading of classes
-	* [NSBundle bundleForClass:]
-	* Objc_loadmodule
-* NSSelectorFromString, NSClassFromString, etc. sont en fait des méthodes dans Foundation !
+## Distributed Objects
+
+<!--
+Aujourd'hui plus ou moins abandonné, mais qui permet à l'époque de faire des envois de message (au sens objc) entre process, et sur le réseau.
+XPC ?
+-->
+
+<!-- syntaxe quasiment plus utilisée nulle part -- >
+
+Type Qualifiers
+  
+	oneway
+	in
+	out
+	inout
+	bycopy
+	byref
+
+&nbsp;
+
+	- (oneway void) doSomethingInRemoteObject;
+
+---
+
+### Dynamic Loading
+
+<!-- Le chargement dynamique de classes est une feature du runtime -->
+
+	`objc_loadmodule`
+
+&nbsp;
+
+    [NSBundle bundleForClass:]
+
+
+---
+
+### Foundation
+
+<!-- Foundation apporte aussi un lot de méthodes pour faciliter la manipulation bas niveau, et le forward d'invocation -->
+
+* NSSelectorFromString, NSClassFromString, etc.
 * NSInvocation
-* NSProxy
+* NSProxy 
+
+<!-- le forward est plus ou moins vu comme un palliatif à l'absence d'héritage multiple. En tout les cas, c'est un mécanisme de POO qui est permit par des objets NS.
+-->
 	
 ---
 
+### Style
 
 <!--
- different style, most methods return self implicitely, you can write 
+Le style évolue aussi, la plupart des méthodes retourne "self" au lieu de "void".
  -->
 
-````
-@inteface SomeClass
-- (id) doThis;
-- (id) doThat;
-@end
 
-...
+	@inteface SomeClass
 
-[[someObject doThis] doThat];
-````
+	- (id) doThis;
+	- (id) doThat;
 
-----
+	@end
+
+--
+	
+	...
+	
+	[[someObject doThis] doThat];
+
+---
+
+### Style
 
 <!-- 
 (id) is !still! the default type for methods and args, you can write 
 -->
 
-````
-@inteface SomeClass
-- doThisWithThat:someOtherObject;
-@end
+	@inteface SomeClass
 
-@implementation MyClass
-- doThisWithThat: someOtherObject
-{
-    return someObject;
-}
-@end
-```
+	- method: arg;
+
+	@end
+
+--
+	
+	@implementation MyClass
+
+	- method: arg
+	{
+	    return someObject;
+	}
+
+	@end
 
 
 ---
 layout:true
-class: center
+class: center, middle
 
 # Apple
 
@@ -255,16 +349,32 @@ Rachat de Next en 1997
 
 ---
 
-Carbon
+*“Cocoa is owned by Apple, and the indications are that Apple is going to either completely drop its support for ObjC in favor of Java, or at least de-emphasize its use to the point where nobody would want to even look at it (in fact, this "death by default" has already happened).”*
+
+comp.sys.next.programmer, Avril 2000.
+
+<!--
+Apple a effectivement d'autres plans pour Mac OS X. (ou plutôt des alternatives).
+
+-->
+
+---
+
+Carbon et CoreFoundation
+
+--
 
 JavaCocoa
 
---
-“Cocoa is owned by Apple, and the indications are that Apple is going to either completely drop its support for ObjC in favor of Java, or at least de-emphasize its use to the point where nobody would want to even look at it (in fact, this "death by default" has already happened).”
+<!-- JavaCocoa n'est un bridge pour faire de l'objc en Cocoa, mais un bridge Cocoa pour Java, qui permet d'utiliser AppKit en Java.
+A l'époque, Apple vante Mac OS X comme "le premier système compatible Java".
 
-class:right
+(En tout cas pour le développement d'applications desktop)
 
-comp.sys.next.programmer, Avril 2000.
+Il faut admettre qu'en 2000, Java est considéré comme le future de l'informatique.
+
+Peu d’applis sont réellement développées avec JavaCocoa. Cyberduck.
+-->
 
 ---
 
@@ -274,91 +384,291 @@ layout: true
 
 ---
 
-## 10.0 (2001)
+## Toll-Free Bridging (Mac OS X 10.0)
 
-* toll-free-bridging
- * Objc_get_future_class 
+<!-- Compatibilité avec CoreFoundation pour simplifier l'adoption de Mac OS X -->
 
----
 
-## 10.3
+	NSString * <=> CFStringRef
 
-* KVO & Bindings
-	* objc_duplicate_class
-* @throw exception instead of old setjmp/longjmp-based NS_DURING/NS_HANDLER.
+--
 
----
+<!--
+Pas strictement un ajout à objc, mais implémenté avec un hack dans le language
+-->
 
-## 10.4
-
-* switch (back) to Intel
-* CoreData,
-* KVC sur les collections
-* ajouts au KVC des opérateurs de collection.
+`objc_getfutureclass`&nbsp;: Used by CoreFoundation's toll-free bridging. Do not call this function yourself.
 
 
 ---
+layout: true
+## Mac OS X 10.3
 
-# Leopard : Objective-C 2.0
+---
+
+### Key-Value Observing et Bindings
+
+<!-- basé sur les conventions du KVC, permet d'être notifié d'un changement de valeur d'un objet.-->
+
+	[object addObserver:self forKeyPath:@"someKey" options:0 context:NULL];
+<!-- apporte aussi nombre de conventions de nommage, il s'agit des prémices des @properties-->
+
+--
+<!-- Implémenté avec un hack lui aussi, qui insère une classe dans la hiérarchie au moment ou on commence à observer un objet. -->
+
+`objc_duplicateclass`&nbsp;: Used by Foundation's Key-Value Observing. Do not call this function yourself.
+
+---
+
+## Exceptions modernes
+
+--
+
+<!-- le vieux mécanisme d'exception utilise setjmp/longjmp, c'est à dire un saut (brutal) sur la stack -->
+<!-- implémenté avec des macros -->
+
+	NS_DURING
+		[[NSException exception] raise];
+	NS_HANDLER
+	   // handle it
+	NS_ENDHANDLER
+
+--
+
+<!-- Le nouveau mécanisme est le même que C++ (et il est compatible avec lui), permet par exemple de récupérer la stack. -->
+
+	@try
+		@throw exception
+	@catch
+		// handle it
+	@finally
+
 
 ---
 
 layout:true
-# Leopard : Objective-C 2.0
+## Mac OS X 10.4
 
-* @package
-* garbage collector
-* gcc attributes `__attribute__((deprecated))`, `NS_REQUIRES_NIL_TERMINATION`
-* dot notation
-* @properties
-* C++ compatible exceptions "zero-cost"
-* fastenums
-* `@optional` methods in Protocols.
-* we start talking about weak and strong pointers
-* Class Extentions ("catégorie anonyme")
+<!-- switch (back) to Intel, mais a priori ce n'est pas ce qui pose de problème à ObjC. -->
+
+### CoreData
+
+<!-- Héritier de EOF -->
+
+--
+
+### Key-Value Coding sur les Collections
+
+	[array valueForKey:@"someValue"]
+
+<!-- retourne un array en appelant valueForKey: sur chaque objet de la collection -->
+
+--
+
+### Opérateurs de collection
+
+<!-- Programmation de plus haut niveau, metaprog -->
+
+	[persons valueForKeyPath:@"@avg.age"];
+	[array valueForKey:@"someValue"]
+	
+
+---
+
+layout: false
+class: center, middle
+
+# Mac OS X 10.5
+# Objective-C 2.0
+
+---
+
+layout:true
+## Objective-C 2.0
+
+---
+
+### Garbage Collector
+
+*“State of the art”*
+
+<!--
+Apple en est très fière. Cependant, il faut compiler en double, on ne peut linker qu'avec des frameworks compatibles avec le GC.
+
+Même s'il finira par être abandonné, il aide à clarifier les notions de gestion de mémoire, de graphe d'objets.
+(de responsabilité et d'appartenance). On commence à parler de pointeurs strong et weak.
+-->
+
+--- 
+
+### Properties
+
+Notation pointée
+
+<!--
+Compatible avec les properties, mais avec tout ce qui respecte le nommage KVC.
+-->
+
+	[obj setFoo:value]
+
+devient
+
+	obj.foo = value;
+
+--
+
+	- (Foo*) foo;
+	- (void) setFoo:(Foo*)foo;
+	
+devient
+
+	@property Foo* foo;
+
+
+<!-- On ajoute une nouvelle syntaxe pour des taches existantes. -->
+<!-- ne fait pas l'unanimité chez les vétérans, parce qu'on a l'impression de manipuler des structs C.-->
+
+---
+
+### Fast Enumeration
+
+<!-- si vous n'avez pas fait d'objc avant 10.5, vous n'avez pas idée de ce que c'était.-->
+<!-- Autant la notation pointée est accueille avec certaines réserves, autant tout le monde accueille ça avec soulagement-->
+
+--
+	
+	NSEnumerator * e
+	
+    NSEnumerator * enumerator = [array objectEnumerator];
+    NSObject * object = nil;
+	
+    while ( (object = [enumerator nextObject]) != nil )
+	{
+        ...
+    }
+	
+--
+
+	for( NSObject* object in array)
+	{
+		...
+	}
 
 ---
 ### "Modern runtime"
 
-(64-bit et ARM)
+Uniquement sur Mac 64-bit et sur iOS.
 
-* Non-fragile ABI
-	* ajour d'ivar au runtime
-	* Object != struct
-* @defs et sizeof(class) ne fonctionnent plus
-* class_poseAs deprecated
-* zones (allocWithZone) are deprecated
+**Non-fragile ABI**
 
-* Bridges Cocoa ruby, python, AppleScript.
-* JavaCocoa deprecated
+<!--
+	ajout d'ivar au runtime
+	Object != struct
+	Une nouvelle version d'une classe parente ne casse pas les classes filles.
+-->
+
+--
+@defs et sizeof(NSArray) n’ont plus de sens.
 
 ---
 
-## CoreAnimation
-
-* Core Animation Extensions To Key-Value Coding
+### Bonus d’Objective-C 2.0
 
 
---- 
+`NS_REQUIRES_NIL_TERMINATION`
+
+-- 
+
+NSZones deprecated
+
+<!--
+Permet d'allouer un objet dans une zone mémoire prédéfinie. N'avait plus vraiment de sens depuis longtemps. Nécessaire pour le GC.
+-->
+
+--
+
+Bridges du runtime avec d’autres languages : rubyCocoa, python (pyObjC), AppleScript…
+<!--n'utilisent pas la syntaxe d'objc, mais utilisent directement le runtime pour utiliser des méthodes Cocoa ou ObjC. -->
+
+--
+
+JavaCocoa deprecated.
+
+<!-- At last !-->
+
+--
+
+`@optional` methods in Protocols.
+
+<!-- l'ancienne notion de "protocol informel", implémenté avec une catégorie sur NSObject, disparait. -->
+
+--
+
+Class Extentions ("catégorie anonyme")
+	
+	// Class.m
+	@interface Class(PrivateMethods)
+	...
+	@end
+	
+devient
+
+	// Class.m
+	@interface Class()
+	...
+	@end
+	
+<!--
+ Le principal est que le compilateur sait qu'une méthode privée manque de l'implémentation.
+ Ici aussi, on ajoute une nouvelle syntaxe pour un usage courant.
+-->
+
+---
+
+layout:false
+class: center,middle
+
 # clang
 
---- 
-layout:true
-# clang
+<!-- la grosse évolution suivante est le changement de compilateur, qui va permettre à Apple d'ajouter toutes les features à son rythme, sans dépendre de gcc.-->
 
---- 
+---
 
 ## Xcode 3
 
-* clang static analyzer
-	* leverages language conventions for semantics. Convention becomes part of the language.
+Clang static analyzer
+
+
+<!--
+Détecte les leaks à la compilation en se basant sur les conventions du language.
+-->
+
 
 ---
 
-## iOS 4.0 / Mac OS X (10.6 ?) / "Objective-C 2.1"
+## Blocks (“Objective-C 2.1”)
 
-* blocks (?)
-* @autoreleasepool
+	__block BOOL found = NO;
+	NSSet *aSet = [NSSet setWithObjects: @"Alpha", @"Beta", @"Gamma", @"X", nil];
+	NSString *string = @"gamma";
+ 
+	[aSet enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+	    if ([obj localizedCaseInsensitiveCompare:string] == NSOrderedSame) {
+	        *stop = YES;
+	        found = YES;
+	    }
+	}];
+ 
+	// At this point, found == YES
+
+<!--
+Ajout à C, autant qu’à ObjC. On peut utiliser les blocks sans objective-C, mais la structure interne des blocks est compatible avec les objets ObjC (on peut par exemple les mettre dans un NSArray.)
+
+Gros, gros changement de paradigme. Remplace dans certaines API les delegates, les selecteurs, etc.
+Concept similaire aux NSInvocations, dans l'absolu.
+
+D'un autre côté, la syntaxe n'est pas géniale, et le flag de termination dans l'exemple est franchement inélégant.
+-->
 
 ---
 
@@ -366,89 +676,264 @@ layout:true
 
 * Macros de weak linking (NS_CLASS_AVAILABLE)
 
+---
+
 ## iOS 5
+
 * `UIAPPEARANCE_SELECTOR`
 
 ---
-
-## clang 2.0? (Apple LLVM Compiler 3.0)
-
-* ivars in @implementation and in class extension
-
-* glissement sémantique : assign/retain deviennent weak/strong
-
-## Xcode 4.2
-* ARC 
-	* (deprecates garbage collector)
-	* deprecates retain and release
-	* weak (nilified) pointers
-* @autorelease
-* precise method semantics (objc_method_family, behavior attrs)
-* automatic call of [super dealloc]
-
-## Xcode 4.3 / 4.4
-* no forward declaration of methods needed anymore (clang x.x)
+layout:true
+## LLVM Compiler 3.0
 
 ---
 
-## Xcode 4.4 / 4.5 / Apple LLVM Compiler 4.0, clang v3.1
+#### Private Instance Variables
 
-* Autosynthesized properties
-* Boxing
-* Container Literals
-* Subscripting
-* `instancetype` keyword
-* typed enums
+<!--
+	sucre syntaxique qui ne fait au font qu'utiliser les fonctionnalités du runtime moderne
+	* no forward declaration of methods needed anymore (LLVM Compiler 3.1)
+-->
 
-byproducts :
-* overloaded functions in C
-* objc++11 (auto, lambdas, etc)
-* libc++
-* clang::fallthrough
-* calling a variable "id" now works with clang (didn't work in gcc)
+	// MyClass.h
+	@interface MyClass : NSObject
+	{
+		int foo;
+		id bar;
+	}
+	...
+	@end
 
-## 10.8 / iOS 5
+devient
 
-* automatic bridging with CoreFoundation with ARC, using arc_cf_code_audited
+	// MyClass.m
+	@interface MyClass ()
+	{
+		int foo;
+		id bar;
+	}
+	...
+	@end
+
 
 ---
-laytout: false
 
-# Future features ?
+#### Private Instance Variables
 
-## Syntaxic sugar
-* automatic call of super (no need to specify args)
-* shorter NSString format
-* Boxing for nsvalues
-> "The default implementations of valueForKey: and setValue:forKey: provide support for automatic object wrapping of the non-object data types, both scalars and structs."
+<!--
+	sucre syntaxique qui ne fait au font qu'utiliser les fonctionnalités du runtime moderne
+	* no forward declaration of methods needed anymore (LLVM Compiler 3.1)
+-->
+
+	// MyClass.h
+	@interface MyClass : NSObject
+	{
+		int foo;
+		id bar;
+	}
+	...
+	@end
+
+ou même
+
+	@implementation MyClass
+	{
+		int foo;
+		id bar;
+	}
+	...
+	@end
+
+
+---
+
+<!-- Même si elle n'a pas (encore) de features privées, Apple utilise son propre fork de clang, et n'utilise pas la même numérotation de versions. -->
+#### ARC
+
+--
+
+<!-- le but va être de remplacer le GC -->
+Garbage Collector deprecated
+
+--
+
+`retain` et `release` sont intégrés au language.
+
+<!--
+jusque là, c'était encore un mécanisme fait par Foundation, indépendant du runtime ou du compilateur.
+retain et release deviennent partie du language, on n'a plus le droit de les réimplémenter ou de les appeler manuellement.
+glissement sémantique : les attributs assign/retain des properties deviennent weak/strong.
+-->
+
+--
+
+`objc_method_family`
+
+<!-- Certaines méthodes sont automatiquement reconnues comme ayant une sémantique particulière, par exemple les méthodes alloc et new qui créent un objet avec un retain count à 1. 
+La famille de méthode peut-être définie automatiquement, en respectant les conventions que clang connait, ou en précisant un attribut à la main
+-->
+
+-- 
+
+weak pointers
+
+<!-- Automatiquement mis à nil quand l'objet pointé est détruit. (à partir de iOS 5 et 10.8) -->
+
+
+---
+layout:true
+## LLVM Compiler 4.0
+
+---
+
+#### `@synthesis` automatique des ivars des properties
+<!-- sauf pour NSManagedObject. En fait, clang l'avait intégré pour Xcode 4.0b, et était revenu au design parce que la première version gérait mal certains cas. -->
+
+---
+
+#### Boxing
+	
+	[NSNumber numberWithDouble:M_PI/2.0]
+	
+devient
+	
+	@(M_PI/2.0)
+
+---
+
+#### Container literals
+
+pour `NSArray` et `NSDictionary
+
+	[NSArray arrayWithObject:obj1, obj2, obj3, nil];
+	
+devient
+	
+	@[obj1, obj2, obj3]
+
+---
+
+#### Subscripting
+
+	[dictionary objectForKey:@"key"];
+	
+devient
+
+	dictionary[@"key"]
+
+<!--
+ Pas forcément super clair qu'il ne s'agit pas d'un array C. 
+ Implémentation appelle en réalité de nouvelles méthodes (indexedObjectForKey), qui doivent être définies sur le container.
+ On peut les ajouter à ses propres classe si on veut et les rendres compatibles avec le subscripting. C'est presque de l'overload d'opérateur à la c++.
+-->
+
+---
+#### Bonus
+
+Mot clé `instancetype`
+
+<!-- implémenté avec les objc_method_family -->
+
+	@interface A
+	+ (instancetype)constructAnA;
+	@end
+
+--
+
+<!-- permet au compilateur de savoir que [NSMutableArray new] renvoie un NSMutableArray, pas un NSArray, ni un id -->
+
+	[[NSMutableArray new] addObject:someObject];
+
+
+--
+
+Function Overloading in C
+
+	float __attribute__((overloadable)) tgsin(float x) { return sinf(x); }
+	double __attribute__((overloadable)) tgsin(double x) { return sin(x); }
+	long double __attribute__((overloadable)) tgsin(long double x) { return sinl(x); }
+	
+--
+
+CoreFoundation “compatible” avec ARC : `arc_cf_code_audited`.
+
+<!-- simplifie le bridge, et permet d'utiliser les conventions de nommage de CF avec ARC.-->
+
+---
+layout: true
+
+# Futur ?
+
+---
+
+<!-- ma wishlist, en quelque sorte. -->
+
+* Appel à `super` automatique (sans spécifier les arguments)
+
+--
+
+`-[NSString stringWithFormat:]` plus court
+
+--
+
+Boxing pour NSValue
+
+	[NSValue valueWithCGPoint:CGPointMake(10,20)];
+
+	@( CGPointMake(10,20) )
+	
+<!--
+En réalité, il y a déjà un système de wrapping pour les structs, avec le KVC : 
+ "The default implementations of valueForKey: and setValue:forKey: provide support for automatic object wrapping of the non-object data types, both scalars and structs." 
+-->
+
+--
+
 * namespaces
 
-## Semantics to use
-* method attribute for designated initializers
-* protected methods 
-* mark methods explicitely for reimplementation, but prevent them from being called by outside code.
-* default values for parameters
-	* doSomething
-	* doSomethingWithStuff:(Stuff*)s
+---
+
+Un attribut de méthode pour le *designated initializer*
+<!-- il n'y a aujourd'hui rien qui vérifie que les règles d'appel du DI sont respectées par ses subclasses.-->
+
+--
+
+Méthodes protected et marquées pour réimplémentation
+
+<!--
+ ça doit faire 20 ans qu'on le demande pour les protected
+ Certaines API déclarent certaines méthode uniquement pour être réimplémentées, par ex -drawRect:. 
+ Ça ne sert à rien qu'elle soit déclarée comme le reste de l'API de UIView.
+ -->
+
+--
+
+Valeurs de paramètres par défaut 
+<!--
+ Ce style d'API est super commun, et à chaque fois, c'est la doc qui précise quelle est la valeur des arguments ignorées.
+ Ça serait mieux dans le language.
+-->
+
+	- (void) doSomething;
+	- (void) doSomethingWithStuff:(Stuff*)s;
 
 
 ---
+layout:false
+class:center
 
 # Links
 
----
+[comp.sys.next.programmer](https://groups.google.com/forum/?fromgroups=#!topic/comp.sys.next.programmer/NUXThBOc360)
+[Objective-C Feature Availability Index]http://developer.apple.com/library/ios/#releasenotes/ObjectiveC/ObjCAvailabilityIndex/_index.html
+<br>
+<br>
+[The OPENSTEP Development Environment](http://objc.toodarkpark.net/introobj.html#712)
+[MacTECH : C++ Versus Objective-C](http://www.mactech.com/articles/mactech/Vol.13/13.03/CandObjectiveCCompared/index.html)
+[GnuStep ObjectiveC Book](http://www.gnustep.org/resources/documentation/ObjectivCBook.pdf)
+[History of Cocoa and Objective-C](http://www.cocoacast.com/cocoacast/?q=node/14)
+[Objective-C Runtime Reference](http://developer.apple.com/library/ios/ipad/#documentation/Cocoa/Reference/ObjCRuntimeRef/Reference/reference.html)
+[Clang Language Extensions](http://clang.llvm.org/docs/LanguageExtensions.html#objc_features)
 
-http://www.cocoacast.com/cocoacast/?q=node/14
-http://objc.toodarkpark.net/introobj.html#712
-http://cocoadev.com/wiki/ObjC
-http://www.mactech.com/articles/mactech/Vol.13/13.03/CandObjectiveCCompared/index.html
-http://blog.securemacprogramming.com/2012/04/comparing-objective-c-and-objective-c-with-objective-c/
-http://www.gnustep.org/resources/documentation/ObjectivCBook.pdf
-http://www.gnustep.org/developers/documentation.html
-http://developer.apple.com/library/ios/ipad/#documentation/Cocoa/Reference/ObjCRuntimeRef/Reference/reference.html
-http://developer.apple.com/library/ios/#releasenotes/ObjectiveC/ObjCAvailabilityIndex/_index.html
-http://web.archive.org/web/19990219224850/http://www2.stepwise.com/Resources/Newsgroups/roadmap.html
-https://groups.google.com/forum/?fromgroups=#!topic/comp.sys.next.programmer/NUXThBOc360
-http://developer.apple.com/library/ios/#documentation/cocoa/conceptual/KeyValueCoding/Articles/DataTypes.html
 
 </textarea><div id="slideshow"></div></body></html>
